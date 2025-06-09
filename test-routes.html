@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Testing Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-route {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .test-route a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .test-route a:hover {
+            text-decoration: underline;
+        }
+        .description {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .status {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .working { background: #d4edda; color: #155724; }
+        .fixed { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>BSwisdom Route Testing</h1>
+    <p>Test all the routes to verify they're working correctly after our fixes.</p>
+      <div class="test-route">
+        <a href="http://localhost:5174/" target="_blank">Home Page</a>
+        <span class="status working">Working</span>
+        <div class="description">Main landing page</div>
+    </div>
+    
+    <div class="test-route">
+        <a href="http://localhost:5174/resources" target="_blank">Resources Index</a>
+        <span class="status fixed">Fixed</span>
+        <div class="description">Main resources page - was showing blank before</div>
+    </div>
+    
+    <div class="test-route">
+        <a href="http://localhost:5174/resources/homework" target="_blank">Homework Resources</a>
+        <span class="status fixed">Fixed</span>
+        <div class="description">Math & Sciences homework help page</div>
+    </div>
+    
+    <div class="test-route">
+        <a href="http://localhost:5174/resources/homework/guides" target="_blank">Study Guides</a>
+        <span class="status fixed">Fixed</span>
+        <div class="description">Study guides section</div>
+    </div>
+    
+    <div class="test-route">
+        <a href="http://localhost:5174/resources/homework/guides/exam-strategies" target="_blank">Exam Strategies</a>
+        <span class="status fixed">Fixed</span>
+        <div class="description">Exam strategies page - was returning 404 before</div>
+    </div>
+    
+    <div class="test-route">
+        <a href="http://localhost:5174/services" target="_blank">Services</a>
+        <span class="status working">Working</span>
+        <div class="description">Services page</div>
+    </div>
+    
+    <div class="test-route">
+        <a href="http://localhost:5174/about" target="_blank">About</a>
+        <span class="status working">Working</span>
+        <div class="description">About page</div>
+    </div>
+    
+    <div class="test-route">
+        <a href="http://localhost:5174/contact" target="_blank">Contact</a>
+        <span class="status working">Working</span>
+        <div class="description">Contact page</div>
+    </div>
+    
+    <h2>Testing Instructions</h2>
+    <ol>
+        <li>Click on each link above to test the route</li>
+        <li>Verify that each page loads without blank screens or 404 errors</li>
+        <li>Check that the content displays properly</li>
+        <li>Look for any console errors in the browser developer tools</li>
+    </ol>
+    
+    <h2>Expected Results</h2>
+    <ul>
+        <li><strong>Resources Index:</strong> Should show a list of available resources with proper navigation</li>
+        <li><strong>Homework Resources:</strong> Should display math and sciences homework help content</li>
+        <li><strong>Exam Strategies:</strong> Should show exam preparation strategies and tips</li>
+        <li><strong>All routes:</strong> Should render with proper layout, navigation, and footer</li>
+    </ul>
+</body>
+</html>

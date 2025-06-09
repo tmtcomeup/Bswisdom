@@ -1,0 +1,23 @@
+{
+  "services": [
+    {
+      "id": "legal-motion",
+      "title": "Legal Motion Writing",
+      "price": 299.99,
+      "description": "Professional legal motion writing assistance for self-represented litigants",
+      "features": [
+        "Legal defense in criminal cases",
+        "Civil lawsuit proceedings",
+        "Court appeals and motions",
+        "Legal document preparation"
+      ],
+      "turnaround": "24-72 hours",
+      "rush": {
+        "available": true,
+        "fee": 99.99,
+        "timeframe": "24 hours"
+      }
+    }
+    // ... rest of services data
+  ]
+}

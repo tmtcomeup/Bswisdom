@@ -1,0 +1,3 @@
+@echo off
+echo Starting BSwisdom site...
+npm run dev

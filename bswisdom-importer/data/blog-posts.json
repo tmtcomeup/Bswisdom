@@ -1,0 +1,21 @@
+{
+  "posts": [
+    {
+      "id": "legal-motion-writing-guide",
+      "title": "The Complete Guide to Legal Motion Writing",
+      "slug": "complete-guide-legal-motion-writing",
+      "author": {
+        "name": "Y.Wise Creator",
+        "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80"
+      },
+      "date": "2024-03-15",
+      "category": "Legal",
+      "tags": ["Legal Writing", "Motion Writing", "Court Procedures"],
+      "excerpt": "Master the art of legal motion writing with our comprehensive guide.",
+      "content": "Full blog post content here...",
+      "imageUrl": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80",
+      "readTime": 15,
+      "socialShares": 342
+    }
+  ]
+}

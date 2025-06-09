@@ -1,0 +1,7 @@
+
+> bswisdom-site@0.1.0 dev
+> vite --force
+
+Forced re-optimization of dependencies
+error when starting dev server:
+Error: EPERM: operation not permitted, rmdir 'C:\Users\Drive\OneDrive\Desktop\Bswisdom-working-site\node_modules\.vite\deps'

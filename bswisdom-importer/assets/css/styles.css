@@ -1,0 +1,58 @@
+/* Base styles */
+:root {
+  --color-primary: rgb(69, 103, 183);
+  --color-secondary: rgb(212, 175, 55);
+  --color-accent: rgb(46, 204, 113);
+}
+
+/* Gradient animations */
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: left center;
+  }
+  50% {
+    background-position: right center;
+  }
+}
+
+/* Custom components */
+.hero-section {
+  position: relative;
+  min-height: 600px;
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
+}
+
+.service-card {
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Utility classes */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(to right, var(--color-primary), darken(var(--color-primary), 10%));
+}
+
+.bg-gradient-secondary {
+  background: linear-gradient(to right, var(--color-secondary), darken(var(--color-secondary), 10%));
+}

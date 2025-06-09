@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .route-test {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        .pending {
+            color: orange;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .log {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            background-color: #f5f5f5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>React Router Route Tester</h1>
+    <div class="test-section">
+        <h2>Test All Routes</h2>
+        <p>Click the button below to test all predefined routes in the application:</p>
+        <button id="testAllRoutes">Test All Routes</button>
+        <div class="log" id="routeTestLog"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Manual Route Test</h2>
+        <p>Enter a route to test manually:</p>
+        <input type="text" id="routeInput" placeholder="/resources/homework" style="width: 300px; padding: 8px;">
+        <button id="testRoute">Test Route</button>
+        <div class="result" id="manualTestResult">Enter a route above and click "Test Route"</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Results Summary</h2>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Route</th>
+                    <th>Status</th>
+                    <th>Response Time (ms)</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Results will be filled here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Common routes to test
+        const routesToTest = [
+            '/',
+            '/about',
+            '/resources',
+            '/resources/homework',
+            '/resources/homework/math-sciences',
+            '/resources/homework/guides/exam-strategies',
+            '/resources/legal',
+            '/resources/website',
+            '/resources/trading',
+            '/resources/resume',
+            '/nonexistent-path' // Should test 404 handling
+        ];
+
+        // Function to log messages
+        function log(message, isError = false) {
+            const logElement = document.getElementById('routeTestLog');
+            const entry = document.createElement('div');
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            if (isError) {
+                entry.style.color = 'red';
+            }
+            logElement.appendChild(entry);
+            // Auto-scroll to bottom
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        // Function to add a result to the table
+        function addResult(route, status, time, notes = '') {
+            const tableBody = document.querySelector('#resultsTable tbody');
+            const row = document.createElement('tr');
+            
+            const routeCell = document.createElement('td');
+            routeCell.textContent = route;
+            
+            const statusCell = document.createElement('td');
+            statusCell.textContent = status;
+            if (status === 'Success') {
+                statusCell.style.color = 'green';
+            } else if (status === 'Error') {
+                statusCell.style.color = 'red';
+            }
+            
+            const timeCell = document.createElement('td');
+            timeCell.textContent = time;
+            
+            const notesCell = document.createElement('td');
+            notesCell.textContent = notes;
+            
+            row.appendChild(routeCell);
+            row.appendChild(statusCell);
+            row.appendChild(timeCell);
+            row.appendChild(notesCell);
+            
+            tableBody.appendChild(row);
+        }
+
+        // Function to test a route
+        function testRoute(route) {
+            return new Promise((resolve, reject) => {
+                log(`Testing route: ${route}`);
+                const startTime = performance.now();
+                
+                // Create a fetch request to test the route
+                fetch(route)
+                    .then(response => {
+                        const endTime = performance.now();
+                        const timeTaken = Math.round(endTime - startTime);
+                        
+                        if (response.ok) {
+                            log(`✅ Route ${route} - Success (${timeTaken}ms)`);
+                            addResult(route, 'Success', timeTaken, `HTTP ${response.status}`);
+                            resolve({
+                                route,
+                                status: 'Success',
+                                time: timeTaken,
+                                response
+                            });
+                        } else {
+                            log(`❌ Route ${route} - HTTP Error: ${response.status}`, true);
+                            addResult(route, 'Error', timeTaken, `HTTP ${response.status}`);
+                            resolve({
+                                route,
+                                status: 'Error',
+                                time: timeTaken,
+                                error: `HTTP ${response.status}`
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        const endTime = performance.now();
+                        const timeTaken = Math.round(endTime - startTime);
+                        log(`❌ Route ${route} - Network Error: ${error.message}`, true);
+                        addResult(route, 'Error', timeTaken, error.message);
+                        resolve({
+                            route,
+                            status: 'Error',
+                            time: timeTaken,
+                            error: error.message
+                        });
+                    });
+            });
+        }
+
+        // Event listener for the "Test All Routes" button
+        document.getElementById('testAllRoutes').addEventListener('click', async function() {
+            this.disabled = true;
+            log('Starting route tests...');
+            
+            for (const route of routesToTest) {
+                await testRoute(route);
+            }
+            
+            log('All route tests completed!');
+            this.disabled = false;
+        });
+
+        // Event listener for the "Test Route" button
+        document.getElementById('testRoute').addEventListener('click', function() {
+            const route = document.getElementById('routeInput').value;
+            if (!route) {
+                document.getElementById('manualTestResult').textContent = 'Please enter a route to test';
+                document.getElementById('manualTestResult').className = 'result error';
+                return;
+            }
+            
+            document.getElementById('manualTestResult').textContent = 'Testing...';
+            document.getElementById('manualTestResult').className = 'result pending';
+            
+            testRoute(route)
+                .then(result => {
+                    if (result.status === 'Success') {
+                        document.getElementById('manualTestResult').textContent = `Success! Route loaded in ${result.time}ms`;
+                        document.getElementById('manualTestResult').className = 'result success';
+                    } else {
+                        document.getElementById('manualTestResult').textContent = `Error: ${result.error}`;
+                        document.getElementById('manualTestResult').className = 'result error';
+                    }
+                });
+        });
+
+        // Initialize with a welcome message
+        log('Route tester initialized. Click "Test All Routes" to begin testing.');
+    </script>
+</body>
+</html>

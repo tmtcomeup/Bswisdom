@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Router Test</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/react-router-dom@6/umd/react-router-dom.development.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // Import React Router components
+    const { BrowserRouter, Routes, Route, Link, Outlet } = ReactRouterDOM;
+
+    // Layout Component
+    const Layout = () => {
+      return (
+        <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '1200px', margin: '0 auto' }}>
+          <nav style={{ backgroundColor: '#f0f0f0', padding: '15px', marginBottom: '20px' }}>
+            <Link to="/" style={{ marginRight: '15px', color: '#333', textDecoration: 'none' }}>Home</Link>
+            <Link to="/about" style={{ marginRight: '15px', color: '#333', textDecoration: 'none' }}>About</Link>
+            <Link to="/resources" style={{ marginRight: '15px', color: '#333', textDecoration: 'none' }}>Resources</Link>
+            <Link to="/resources/homework" style={{ marginRight: '15px', color: '#333', textDecoration: 'none' }}>
+              Homework
+            </Link>
+            <Link to="/resources/homework/math-sciences" style={{ marginRight: '15px', color: '#333', textDecoration: 'none' }}>
+              Math Sciences
+            </Link>
+          </nav>
+          <main style={{ padding: '20px' }}>
+            <Outlet />
+          </main>
+          <footer style={{ backgroundColor: '#f0f0f0', padding: '15px', marginTop: '20px', textAlign: 'center' }}>
+            &copy; 2025 Test Site
+          </footer>
+        </div>
+      );
+    };
+
+    // Page components
+    const HomePage = () => <div><h1>Home Page</h1><p>Welcome to our site!</p></div>;
+    const AboutPage = () => <div><h1>About Page</h1><p>Learn about us.</p></div>;
+    
+    const ResourcesPage = () => (
+      <div>
+        <h1>Resources</h1>
+        <p>Browse our resources.</p>
+        <ul>
+          <li><Link to="/resources/homework">Homework Resources</Link></li>
+          <li><Link to="/resources/legal">Legal Resources</Link></li>
+        </ul>
+      </div>
+    );
+    
+    const HomeworkPage = () => (
+      <div>
+        <h1>Homework Resources</h1>
+        <p>Get help with your homework.</p>
+        <ul>
+          <li><Link to="/resources/homework/math-sciences">Math & Sciences</Link></li>
+          <li><Link to="/resources/homework/guides/exam-strategies">Exam Strategies</Link></li>
+        </ul>
+      </div>
+    );
+    
+    const MathSciencesPage = () => (
+      <div>
+        <h1>Math & Sciences</h1>
+        <p>Mathematics and sciences resources.</p>
+        <div>
+          <h2>Mathematics</h2>
+          <ul>
+            <li>Algebra</li>
+            <li>Calculus</li>
+            <li>Geometry</li>
+          </ul>
+        </div>
+      </div>
+    );
+    
+    const ExamStrategiesPage = () => (
+      <div>
+        <h1>Exam Strategies</h1>
+        <p>Tips for success on exams.</p>
+        <div>
+          <h2>Strategies</h2>
+          <ul>
+            <li>Create a study schedule</li>
+            <li>Practice with past exams</li>
+            <li>Study in groups</li>
+          </ul>
+        </div>
+      </div>
+    );
+    
+    const NotFoundPage = () => (
+      <div>
+        <h1 style={{ color: 'red' }}>404 - Not Found</h1>
+        <p>The page you're looking for doesn't exist.</p>
+        <Link to="/">Go back to Home</Link>
+      </div>
+    );
+
+    // Main App Component
+    const App = () => {
+      return (
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="about" element={<AboutPage />} />
+              
+              <Route path="resources">
+                <Route index element={<ResourcesPage />} />
+                
+                <Route path="homework">
+                  <Route index element={<HomeworkPage />} />
+                  <Route path="math-sciences" element={<MathSciencesPage />} />
+                  
+                  <Route path="guides">
+                    <Route path="exam-strategies" element={<ExamStrategiesPage />} />
+                  </Route>
+                </Route>
+                
+                <Route path="legal" element={<div><h1>Legal Resources</h1></div>} />
+              </Route>
+              
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      );
+    };
+
+    // Render the App
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

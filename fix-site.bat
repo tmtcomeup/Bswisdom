@@ -1,0 +1,9 @@
+@echo off
+echo Fixing BSwisdom site...
+
+echo Installing dependencies...
+call npm install
+
+echo.
+echo Starting development server...
+call npm run dev

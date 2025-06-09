@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BSwisdom - Professional Services</title>
+    <meta name="description" content="Professional services powered by collective AI intelligence and human expertise" />
+    <style>
+      /* Add some basic styles to ensure the page is visible even if CSS fails to load */
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+      }
+      #root {
+        min-height: 100vh;
+      }
+      /* Loading indicator */
+      .app-loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+      }
+      .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border-left-color: #09f;
+        animation: spin 1s linear infinite;
+        margin-bottom: 15px;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      /* Error panel styles */
+      .error-panel {
+        padding: 40px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+      }
+      .btn {
+        padding: 10px 20px;
+        background: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-block;
+        text-decoration: none;
+        font-size: 14px;
+        margin-right: 10px;
+      }
+      .btn-secondary {
+        background: #888;
+      }
+      /* Auto-recovery navigation */
+      .recovery-nav {
+        display: none;
+        padding: 15px;
+        background: #f8f8f8;
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      }
+      .recovery-nav.visible {
+        display: block;
+      }
+      .recovery-nav a {
+        margin: 0 10px;
+        color: #0066cc;
+        text-decoration: none;
+      }
+      .recovery-nav a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Initial loading state shown until React renders -->
+      <div class="app-loader">
+        <div class="spinner"></div>
+        <p>Loading application...</p>
+      </div>
+    </div>
+    
+    <!-- Backup Navigation (hidden by default, shown if needed) -->
+    <div id="recovery-nav" class="recovery-nav">
+      <strong>Quick Navigation:</strong>
+      <a href="/">Home</a>
+      <a href="/resources">Resources</a>
+      <a href="/about">About</a>
+      <a href="/services">Services</a>
+      <a href="/debug-console.html">Debug Console</a>
+    </div>
+
+    <!-- Load different entry points with fallback mechanisms -->
+    <script type="module">
+      // Function to handle errors and show appropriate messages
+      function handleError(error, message) {
+        console.error(message, error);
+        
+        const root = document.getElementById('root');
+        if (root) {
+          root.innerHTML = `
+            <div class="error-panel">
+              <h1 style="color: red;">Application Error</h1>
+              <p>${message}</p>
+              <pre style="background: #f5f5f5; padding: 10px; overflow: auto; border-radius: 4px;">${error?.message || 'Unknown error'}</pre>
+              
+              <div style="margin-top: 20px;">
+                <button class="btn" onclick="window.location.reload()">
+                  Reload Application
+                </button>
+                <a href="/minimal-test.html" class="btn btn-secondary">
+                  Try Minimal Version
+                </a>
+                <a href="/debug-console.html" class="btn btn-secondary">
+                  Open Debug Console
+                </a>
+              </div>
+            </div>
+          `;
+        }
+        
+        // Show the recovery navigation
+        document.getElementById('recovery-nav').classList.add('visible');
+      }
+
+      // Try to load the application with multiple fallbacks
+      async function loadApplication() {
+        try {
+          // First try to load the complete fixed implementation
+          console.log('Loading complete-fixed-main.jsx');
+          await import('/src/complete-fixed-main.jsx');
+        } catch (error) {
+          console.error('Failed to load complete-fixed-main.jsx:', error);
+          
+          try {
+            // Fallback to fixed-main-with-fallback
+            console.log('Trying fixed-main-with-fallback.jsx');
+            await import('/src/fixed-main-with-fallback.jsx');
+          } catch (fallbackError) {
+            console.error('Failed to load fixed-main-with-fallback.jsx:', fallbackError);
+            
+            try {
+              // Last resort - try minimal test main
+              console.log('Trying test-basic.jsx');
+              await import('/src/test-basic.jsx');
+            } catch (finalError) {
+              handleError(finalError, 'All application entry points failed to load.');
+            }
+          }
+        }
+      }
+
+      // Start loading the application
+      loadApplication();
+      
+      // Set a timeout to detect if React fails to render
+      setTimeout(function() {
+        const root = document.getElementById('root');
+        // Check if we still have the loading indicator (React hasn't rendered)
+        if (root && root.innerHTML.includes('Loading application...')) {
+          handleError(new Error('Timeout - React did not render within expected time'), 
+                     'The application is taking too long to load. This might be due to JavaScript errors or performance issues.');
+        }
+      }, 8000); // 8 seconds timeout
+    </script>
+  </body>
+</html>
